@@ -1,4 +1,3 @@
-const formulario = document.querySelector('.form');
 const entrada = document.querySelector('#campo-adivinanza');
 const botonEnviar = document.querySelector('#enviar-adivinanza');
 const intentosAnteriores = document.querySelector('#intentos-anteriores');
@@ -11,9 +10,7 @@ let numerosProbados = [];
 
 intentosRestantes.textContent = 10;
 
-formulario.addEventListener('submit', function (evento) {
-	evento.preventDefault();
-
+botonEnviar.addEventListener('click', function () {
 	const adivinanza = Number(entrada.value);
 
 	intentos++;
