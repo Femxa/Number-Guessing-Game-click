@@ -1,36 +1,49 @@
-const entrada = document.querySelector('#campo-adivinanza');
-const botonEnviar = document.querySelector('#enviar-adivinanza');
-const intentosAnteriores = document.querySelector('#intentos-anteriores');
-const intentosRestantes = document.querySelector('#intentos-restantes');
-const mensaje = document.querySelector('#mensaje');
+const numeroSecreto = Math.floor(Math.random() * 100);
+console.log(numeroSecreto);
+let intentosRestantes = 3; // number
+let listaIntentos = [];
 
-const numeroSecreto = Math.floor(Math.random() * 100) + 1;
-let intentos = 0;
-let numerosProbados = [];
+const campoAdivinanza = document.querySelector("#campo-adivinanza");
+const botonEnviar = document.querySelector("#enviar-adivinanza");
+const mensaje = document.querySelector("#mensaje");
+const textoAnteriores = document.querySelector("#intentos-anteriores");
+const textoRestantes = document.querySelector("#intentos-restantes");
 
-intentosRestantes.textContent = 10;
+// Recupero el formualario para asociarle el evento submit
+const form = document.querySelector("form");
 
-botonEnviar.addEventListener('click', function () {
-	const adivinanza = Number(entrada.value);
+form.addEventListener("submit", function (event) {
+    //Actualizar la variable lista de intentos con el valor que acaba de introducir el usuario
+    //Actualizar la pantalla/nodo con el valor de la variable listaIntentos
+    event.preventDefault();
+    listaIntentos.push(Number(campoAdivinanza.value));
+    textoAnteriores.textContent = listaIntentos;
+    intentosRestantes--;
+    textoRestantes.textContent = intentosRestantes;
+    console.log("numeroSecreto", numeroSecreto);
+    console.log("campoAdivinanza", campoAdivinanza.value);
+    //Si el número secreto es igual que el número que ha puesto el usuario hemos ACERTADO
+    //Si ha acertado ponemos un mensaje de enhorabuena
+    if (numeroSecreto === Number(campoAdivinanza.value)) {
+        mensaje.textContent = "Enhorabuena, !Has acertado el número secreto";
+        console.log("He acertado");
+        campoAdivinanza.disabled = true;
+        botonEnviar.disabled = true;
+    } else if (intentosRestantes == 0) {
+        mensaje.textContent = "!Game Over¡, te has quedado sin intentos"; 
+        campoAdivinanza.disabled = true;
+        botonEnviar.disabled = true;
 
-	intentos++;
-	numerosProbados.push(adivinanza);
-	intentosAnteriores.textContent = numerosProbados.join(', ');
-	intentosRestantes.textContent = 10 - intentos;
+    }
+    else if (numeroSecreto > Number(campoAdivinanza.value)) {
+        mensaje.textContent = "El número es mayor";
 
-	if (adivinanza === numeroSecreto) {
-		mensaje.textContent = `¡Correcto! El número era ${numeroSecreto}.`;
-		entrada.disabled = true;
-		botonEnviar.disabled = true;
-	} else if (intentos === 10) {
-		mensaje.textContent = `Has perdido. El número era ${numeroSecreto}.`;
-		entrada.disabled = true;
-		botonEnviar.disabled = true;
-	} else if (adivinanza < numeroSecreto) {
-		mensaje.textContent = 'El número secreto es mayor.';
-	} else {
-		mensaje.textContent = 'El número secreto es menor.';
-	}
+    } else {
+        mensaje.textContent = "El número es menor";
+    }
 
-	entrada.value = '';
 });
+
+
+
+
